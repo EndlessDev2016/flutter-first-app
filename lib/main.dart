@@ -1,102 +1,70 @@
 import 'package:flutter/material.dart';
+import './transaction.dart';
 
-// import './question.dart';
-// import './answer.dart';
-import './quiz.dart';
-import './result.dart';
+void main() {
+  runApp(MyApp());
+}
 
-// void main() {
-//   runApp(MyApp());
-// }
-
-void main() => runApp(MyApp());
-
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter App',
+      home: MyHomePage(),
+    );
   }
 }
 
-class _MyAppState extends State<MyApp> {
-  final List<Map<String, Object>> _questions = const [
-    {
-      'questionText': 'What\'s your favorite color?',
-      'answers': [
-        {'text': 'Black', 'score': 10},
-        {'text': 'Red', 'score': 3},
-        {'text': 'Green', 'score': 6},
-        {'text': 'White', 'score': 5}
-      ]
-    },
-    {
-      'questionText': 'What\'s your favorite animal?',
-      'answers': [
-        {'text': 'Rabbit', 'score': 2},
-        {'text': 'Snake', 'score': 5},
-        {'text': 'Elephant', 'score': 7},
-        {'text': 'Lion', 'score': 4}
-      ]
-    },
-    {
-      'questionText': 'Who\'s your favorite instructor?',
-      'answers': [
-        {'text': 'Max', 'score': 1},
-        {'text': 'Lee', 'score': 1},
-        {'text': 'Max', 'score': 1},
-        {'text': 'Lee', 'score': 1},
-      ]
-    },
+class MyHomePage extends StatelessWidget {
+  final List<Transaction> transactions = [
+    Transaction(
+        id: 't1', title: 'New Shose1', amount: 69.99, date: DateTime.now()),
+    Transaction(
+        id: 't2', title: 'New Shose2', amount: 69.99, date: DateTime.now()),
+    Transaction(
+        id: 't3', title: 'New Shose3', amount: 69.99, date: DateTime.now())
   ];
-
-  var _questionIndex = 0;
-  var _totalScore = 0;
-
-  void _resetQuiz() {
-    setState(() {
-      _questionIndex = 0;
-      _totalScore = 0;
-    });
-  }
-
-  void _answerQuestion(int score) {
-    _totalScore += score;
-    setState(() {
-      _questionIndex += 1;
-    });
-    if (_questionIndex < _questions.length) {
-      print('We have more questions!');
-    }
-  }
-
-  // String test() {
-  //   return '';
-  //   // print('asdasdasd!');
-  // }
-
-  // int test2() {
-  //   return 1;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // questions.add({'questionText': 'asdasd', 'answers': ['asdad']});
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('My First App'),
-        ),
-        body: this._questionIndex < this._questions.length
-            ? Quiz(
-                answerQuestion: this._answerQuestion,
-                questions: this._questions,
-                questionIndex: this._questionIndex)
-            : Container(
-                child: Center(
-                  child: Result(this._totalScore, this._resetQuiz),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Flutter App'),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            child: Card(
+              color: Colors.blue,
+              child: Text('CHART!'),
+              elevation: 5,
+            ),
+          ),
+          // Column(children: this.transactions.map((tx) => Card(child: Text(tx.title))).toList())
+          Column(
+              children: this.transactions.map((tx) {
+            return Card(
+                child: Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  child: Text(
+                    tx.amount.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.purple),
+                  ),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: 2)),
+                  padding: EdgeInsets.all(10),
                 ),
-              ),
+                Column(
+                  children: <Widget>[Text(tx.title), Text(tx.date.toString())],
+                )
+              ],
+            ));
+          }).toList())
+        ],
       ),
     );
   }
